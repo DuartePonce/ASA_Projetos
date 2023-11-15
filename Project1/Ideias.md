@@ -43,6 +43,8 @@ int n = 2;
 
 std::list<std::list<int>> *listTypeSlabs = new std::list<std::list<int>>[n + 1];
 
+FIX nao da para ler as coisas como deve de ser
+
 for (int i=1; i <= n; i++) {
     std::cin >> a >> b >> p;
 
