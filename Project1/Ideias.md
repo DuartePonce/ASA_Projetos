@@ -15,5 +15,15 @@ A linha recebe uma chapa retangular **X x Y** e tem acesso a uma lista com os **
 ## Input
 O ficheiro de entrada contrm as dimensoes da chapa e as dimensoes dos tipos de peças
 
-    -> A primeira linha contem **X e Y** separados por um espaço em branca
+    1-> A primeira linha contem **X e Y** separados por um espaço em branca
+
+
 ### Ideia de codigo
+
+1-
+'''
+int x, y;
+cin >> x >> y;
+'''
+
+2-
