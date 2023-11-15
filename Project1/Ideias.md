@@ -65,3 +65,10 @@ for (int i = 1; i <= n; i++) {
     }
 }
 ```
+# Estrura de Dados
+int a, b, p
+int qualidadeDeMetroQuadrado
+pointer next, previous
+
+estrutura de dados com pedra e qualidadde de m^2 e incersao de pedra na linked list por ordem decrescente 
+segundo for para iterar a linked list e descobrir a melhor ombinacao
