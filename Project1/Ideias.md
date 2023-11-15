@@ -15,7 +15,11 @@ A linha recebe uma chapa retangular **X x Y** e tem acesso a uma lista com os **
 ## Input
 O ficheiro de entrada contrm as dimensoes da chapa e as dimensoes dos tipos de peças
 
-    1-> A primeira linha contem **X e Y** separados por um espaço em branca
+1-> A primeira linha contem **X e Y** separados por um espaço em branca
+
+2-> A segunda linha tem um **n** corresponde ao numero de pecas a serem produzidos
+
+3-> Depois são **n linhas** com cada um dos tipos **i** de pecas a serem produzidas, cada linha é composta por **a(i) b(i) e p(i)** separados por um espaço
 
 
 ### Ideia de codigo
@@ -23,7 +27,27 @@ O ficheiro de entrada contrm as dimensoes da chapa e as dimensoes dos tipos de p
 1-
 ```
 int x, y;
-cin >> x >> y;
+std::cin >> x >> y;
 ```
 
 2-
+```
+int n
+std::cin >> n;
+```
+
+3-
+```
+int a, b, p;
+int n = 2;
+
+std::list<std::list<int>> *listTypeSlabs = new std::list<std::list<int>>[n + 1];
+
+for (int i=1; i <= n; i++) {
+    std::cin >> a >> b >> p;
+
+    std::list<int> listSpecs = {a, b, p};
+
+    listTypeSlabs[i].push_front(listSpecs);
+}
+```
