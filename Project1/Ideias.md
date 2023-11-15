@@ -21,9 +21,9 @@ O ficheiro de entrada contrm as dimensoes da chapa e as dimensoes dos tipos de p
 ### Ideia de codigo
 
 1-
-'''
+```
 int x, y;
 cin >> x >> y;
-'''
+```
 
 2-
