@@ -6,6 +6,7 @@
 -> A chapa é cortada verticalmente ou horizontalmente
 -> Cada  uma das duas novas chapas produzidas volta a entrar ou sai, caso seja do tamanho que queremos ou nao preste
 -> 
+-> Para facilitar algumas opções, verificamos se os valores de x e y das peças que podem ser verificadas sao maiores que os valores de x e y da peça que queremos, se for podemos eliminar essas (mais tarde depois de meter mais peças podemos fazer essas verificações de novo, até ao ponto que passemos a ter apenas uma peça a adicionar, ou mesmo nenhuma)
 
 ## Objetivo
 
