@@ -22,7 +22,6 @@ O ficheiro de entrada contrm as dimensoes da chapa e as dimensoes dos tipos de p
 
 3-> Depois são **n linhas** com cada um dos tipos **i** de pecas a serem produzidas, cada linha é composta por **a(i) b(i) e p(i)** separados por um espaço
 
-
 ### Ideia de codigo
 
 1-
@@ -73,3 +72,17 @@ pointer next, previous
 
 estrutura de dados com pedra e qualidadde de m^2 e incersao de pedra na linked list por ordem decrescente 
 segundo for para iterar a linked list e descobrir a melhor ombinacao
+
+# Formula para ver o maximo de uma peça que se pode meter na peça grande
+
+R-> linhas da peça grande
+r-> linhas da peça pequena
+C-> colunas da peça grande
+c-> colunas da peça pequena
+P-> Preço de cada peça
+
+(R/r) * (C/c) * P -> maximo dinheiro que podemos extrair de uma peça pequena
+
+
+
+
