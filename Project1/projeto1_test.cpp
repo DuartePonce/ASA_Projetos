@@ -48,7 +48,7 @@ int totalTileValuation(tile** tileLinkedList, int x, int y) {
 
     if (tileList == NULL) {
         return 0;
-    } else if ((y - tileList->y)) {
+    } else if (tileList->x > x && tileList->y > y) {
         return 0;
     } else if (x == 0 || y == 0) {
         return 0;
