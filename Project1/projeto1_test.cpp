@@ -23,14 +23,41 @@ void insertFuntion (tile** tileLinkedList, int a, int b, int p, int q) {
         *tileLinkedList = newTile;//creates the first element of the list
     } else {
         while(tileList != NULL && q != 0){//iteration to go through the list q is bulshit for now there
-            if(q >= tileList->quality) {//first step in wich i insert in the front
+            if(q >= tileList->quality) {//first step in wich i insert in the front   good
                 *tileLinkedList = newTile;
                 newTile->next = tileList;
                 q = 0;//bullshit
+            } else if (tileList->next != NULL && tileList->next->quality < q) { //Case to add in the middle 
+                tile* tileAuxiliar = tileList->next;//auxiliar tile pointer to save the integrity of the linked list
+                tileList->next = newTile;
+                newTile->next = tileAuxiliar;
+                q = 0;//bullshit
+            } else if (tileList->next == NULL) { //Case to add in the end
+                tileList->next = newTile;
+                q = 0;//bullshit
             }
-
             tileList = tileList->next;
         }
+    }
+}
+
+
+int totalTileValuation(tile** tileLinkedList, int x, int y) {
+    tile* tileList = *tileLinkedList;
+
+
+    if (tileList == NULL) {
+        return 0;
+    } else if ((y - tileList->y)) {
+        return 0;
+    } else if (x == 0 || y == 0) {
+        return 0;
+    } else if (tileList->x > x || tileList->y > y) {
+        return totalTileValuation(&tileList->next, x, y);
+    } else {
+        return tileList->price + totalTileValuation(&tileList, tileList->x, (y - tileList->y)) +
+           totalTileValuation(&tileList, (x - tileList->x), y) + 
+           totalTileValuation(&tileList, (x - tileList->x), (y - tileList->y));
     }
 }
 
@@ -42,9 +69,15 @@ int main() {
 
     for (int i = 1; i <= n; i++) {
         std::cin >> a >> b >> p;
-        int quality = i;
+        int quality = (x/a) * (y/b) * p;
         insertFuntion(&tileLinkedList, a, b, p, quality);
-    }   
+    } 
 
+    tile* tileList = tileLinkedList;
+    while(tileList != NULL) {
+        printf("%d x %d\n", tileList->x, tileList->y);
+        tileList = tileList->next;
+    }
+    printf("%d", totalTileValuation(&tileLinkedList, x, y));
     return 0;
 }
