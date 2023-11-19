@@ -19,11 +19,13 @@ void insertFuntion (tile** tileLinkedList, int a, int b, int p, int q) {
     tile* tileList = *tileLinkedList;
     tile* newTile = (tile*) malloc(sizeof(tile));
     createTile(newTile, a, b, p, q);
+
     if (tileList == NULL) { //Verifies if the linked list has anyting
         *tileLinkedList = newTile;//creates the first element of the list
     } else {
         while(tileList != NULL && q != 0){//iteration to go through the list q is bulshit for now there
-            if(q >= tileList->quality) {//first step in wich i insert in the front   good
+
+            if(q >= tileList->quality) {//Cse to add in front
                 *tileLinkedList = newTile;
                 newTile->next = tileList;
                 q = 0;//bullshit
@@ -37,14 +39,13 @@ void insertFuntion (tile** tileLinkedList, int a, int b, int p, int q) {
                 q = 0;//bullshit
             }
             tileList = tileList->next;
+
         }
     }
 }
 
-
 int totalTileValuation(tile** tileLinkedList, int x, int y) {
     tile* tileList = *tileLinkedList;
-
 
     if (tileList == NULL) {
         return 0;

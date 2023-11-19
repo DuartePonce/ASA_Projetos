@@ -84,5 +84,10 @@ P-> Preço de cada peça
 (R/r) * (C/c) * P -> maximo dinheiro que podemos extrair de uma peça pequena
 
 
-
-
+# Exemplo
+3 8 3
+1 5 50
+1 2 15
+2 2 10
+## Output 
+195
