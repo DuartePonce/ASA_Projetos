@@ -48,15 +48,16 @@ int totalTileValuation(tile** tileLinkedList, int x, int y) {
 
     if (tileList == NULL) {
         return 0;
-    } else if (tileList->x > x && tileList->y > y) {
+    } else if (tileList->x > x && tileList->y > y) { //Review
         return 0;
     } else if (x == 0 || y == 0) {
         return 0;
     } else if (tileList->x > x || tileList->y > y) {
+        // Verify linked list
         return totalTileValuation(&tileList->next, x, y);
     } else {
         return tileList->price + totalTileValuation(&tileList, tileList->x, (y - tileList->y)) +
-           totalTileValuation(&tileList, (x - tileList->x), y) + 
+           totalTileValuation(&tileList, (x - tileList->x), tileList->y) + 
            totalTileValuation(&tileList, (x - tileList->x), (y - tileList->y));
     }
 }
@@ -69,15 +70,9 @@ int main() {
 
     for (int i = 1; i <= n; i++) {
         std::cin >> a >> b >> p;
-        int quality = (x/a) * (y/b) * p;
+        int quality = p / (a * b);
         insertFuntion(&tileLinkedList, a, b, p, quality);
     } 
-
-    tile* tileList = tileLinkedList;
-    while(tileList != NULL) {
-        printf("%d x %d\n", tileList->x, tileList->y);
-        tileList = tileList->next;
-    }
     printf("%d", totalTileValuation(&tileLinkedList, x, y));
     return 0;
-}
+}   
