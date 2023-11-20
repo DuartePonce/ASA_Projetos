@@ -1,6 +1,7 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <chrono>
 
 typedef struct tile{
     int x, y, price, quality; //Variable quality is only for testing for now i will work it out
@@ -49,12 +50,16 @@ int totalTileValuation(tile** tileLinkedList, int x, int y) {
 
     if (tileList == NULL) {
         return 0;
-    } else if (tileList->x > x && tileList->y > y) { //Review
-        return 0;
     } else if (x == 0 || y == 0) {
         return 0;
     } else if (tileList->x > x || tileList->y > y) {
-        // Verify linked list
+
+        if (tileList->y <= x && tileList->x <= y) {
+            return tileList->price + totalTileValuation(&tileList, tileList->y, (y - tileList->x)) +
+                   totalTileValuation(&tileList, (x - tileList->y), tileList->x) + 
+                   totalTileValuation(&tileList, (x - tileList->y), (y - tileList->x));
+        }
+
         return totalTileValuation(&tileList->next, x, y);
     } else {
         return tileList->price + totalTileValuation(&tileList, tileList->x, (y - tileList->y)) +
@@ -64,6 +69,7 @@ int totalTileValuation(tile** tileLinkedList, int x, int y) {
 }
 
 int main() {
+
     int x, y, n, a, b, p;
     tile *tileLinkedList = NULL;
     std::cin >> x >> y;
@@ -71,9 +77,16 @@ int main() {
 
     for (int i = 1; i <= n; i++) {
         std::cin >> a >> b >> p;
-        int quality = p / (a * b);
+        int quality = (x / a) * (y / b) * p;
         insertFuntion(&tileLinkedList, a, b, p, quality);
     } 
-    printf("%d", totalTileValuation(&tileLinkedList, x, y));
+    printf("%d\n", totalTileValuation(&tileLinkedList, x, y));
+
+    tile* tileList = tileLinkedList;
+    while (tileList != NULL) {
+        printf("%d\n", tileList->quality);
+        tileList = tileList->next;
+    }
+
     return 0;
 }   
