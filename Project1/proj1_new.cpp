@@ -24,12 +24,16 @@ void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
     for (int i = 0; i <= n; i++) {
         for (int j = 0; j <= x; j++) {
             for (int k = 0; k <= y; k++) {
-                
+
                 if (i == 0 || j == 0 || k == 0) {
                     dp[i][j][k] = 0;
                 }
-                else if ( !(tilesVector[i]->x > x || tilesVector[i]->y > y) ) {
+                else if (tilesVector[i]->x <= x && tilesVector[i]->y <= y) {
                     dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][y - tilesVector[i]->y], dp[i - 1][tilesVector[i]->x][y - tilesVector[i]->y]);
+                }
+                else if (tilesVector[i]->x <= y && tilesVector[i]->y <= x) {
+                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][y - tilesVector[i]->y] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->x][y - tilesVector[i]->y] + tilesVector[i]->price);
+
                 }
 
                 // else {
