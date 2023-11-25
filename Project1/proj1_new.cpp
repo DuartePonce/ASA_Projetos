@@ -18,6 +18,15 @@ void createTile(tile* tile, dimension* dim, int p) {
     tile->dim = *dim;
     tile->price = p;
 }
+void vectorDimensionCreator(std::vector<dimension*>& dimensionVector, int x, int y) {
+    for (int i = 1; i <= x; i++) {
+        for (int j = 1; j <= y; j++) {
+            dimension* dim = new dimension;
+            createDimension(dim, i, j);
+            dimensionVector.push_back(dim);
+        }
+    }
+}
 int max(int a, int b, int c) {
    return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
 }
@@ -38,6 +47,7 @@ int main() {
     dimension* mainTile = new dimension;
     createDimension(mainTile, x, y);
     std::vector<tile*> tilesVector;
+    std::vector<dimension*> dimensionVector;
 
     for (int i = 0; i < n; i++) {
         std::cin >> a >> b >> p;
@@ -47,8 +57,9 @@ int main() {
         createTile(tiles, dim, p);
         tilesVector.push_back(tiles);
     } 
-
     
+    vectorDimensionCreator(dimensionVector, x, y);
+
 
     return 0;
 }
