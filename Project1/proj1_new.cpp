@@ -2,6 +2,7 @@
 #include <list>
 #include <vector>
 #include <chrono>
+#include <algorithm>
 
 struct tile {
     int x, y;
@@ -14,8 +15,8 @@ void createTile(tile* tile, int x, int y, int p) {
     tile->price = p;
 }
 
-int max(int a, int b, int c) {
-   return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
+int max(int a, int b, int c, int d) {
+    return std::max(std::max(a, b), std::max(c, d));
 }
 
 void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
@@ -30,18 +31,18 @@ void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
                 }
                 else if (tilesVector[i]->x <= j && tilesVector[i]->y <= k) {
                     if (j % tilesVector[i]->x == 0 && k % tilesVector[i]->y == 0) {
-                        dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0);
+                        dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0, 0);
                     }
                     else {
-                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->y], dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y]);
+                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->y], dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y], dp[i][j][k-1]);
                     }
                 }
                 else if (tilesVector[i]->x <= k && tilesVector[i]->y <= j) {
                     if (j % tilesVector[i]->y == 0 && k % tilesVector[i]->x == 0) {
-                        dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0);
+                        dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0, 0);
                     }
                     else {
-                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->x] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->y][k - tilesVector[i]->x] + tilesVector[i]->price);
+                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->x] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->y][k - tilesVector[i]->x] + tilesVector[i]->price, dp[i][j][k-1]);
                     }
                 }
                 else {
