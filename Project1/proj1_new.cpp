@@ -28,21 +28,24 @@ void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
                 if (i == 0 || j == 0 || k == 0) {
                     dp[i][j][k] = 0;
                 }
-                else if (tilesVector[i]->x <= x && tilesVector[i]->y <= y) {
-                    if (x % tilesVector[i]->x == 0 && y % tilesVector[i]->y == 0) {
-                        dp[i][j][k] = x / tilesVector[i]->x * y / tilesVector[i]->y * tilesVector[i]->price;
+                else if (tilesVector[i]->x <= j && tilesVector[i]->y <= k) {
+                    if (j % tilesVector[i]->x == 0 && k % tilesVector[i]->y == 0) {
+                        dp[i][j][k] = j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price;
                     }
                     else {
-                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][y - tilesVector[i]->y], dp[i - 1][tilesVector[i]->x][y - tilesVector[i]->y]);
+                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->y], dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y]);
                     }
                 }
-                else if (tilesVector[i]->x <= y && tilesVector[i]->y <= x) {
-                    if (x % tilesVector[i]->y == 0 && y % tilesVector[i]->x == 0) {
-                        dp[i][j][k] = x / tilesVector[i]->y * y / tilesVector[i]->x * tilesVector[i]->price;                     
+                else if (tilesVector[i]->x <= k && tilesVector[i]->y <= j) {
+                    if (j % tilesVector[i]->y == 0 && k % tilesVector[i]->x == 0) {
+                        dp[i][j][k] = j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price;                     
                     }
                     else {
-                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][y - tilesVector[i]->x] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->y][y - tilesVector[i]->x] + tilesVector[i]->price);
+                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->x] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->y][k - tilesVector[i]->x] + tilesVector[i]->price);
                     }
+                }
+                else {
+                    dp[i][j][k] = 0;
                 }
 
                 // else {
