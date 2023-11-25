@@ -24,13 +24,13 @@ void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
     for (int i = 0; i <= n; i++) {
         for (int j = 0; j <= x; j++) {
             for (int k = 0; k <= y; k++) {
-                std::cout << i << ", " << j << ", " << k << "\n";
+                std::cout << i << ", " << j << ", " << k << "-";
                 if (i == 0 || j == 0 || k == 0) {
                     dp[i][j][k] = 0;
                 }
                 else if (tilesVector[i]->x <= j && tilesVector[i]->y <= k) {
                     if (j % tilesVector[i]->x == 0 && k % tilesVector[i]->y == 0) {
-                        dp[i][j][k] = j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price;
+                        dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0);
                     }
                     else {
                     dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->y], dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y]);
@@ -38,7 +38,7 @@ void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
                 }
                 else if (tilesVector[i]->x <= k && tilesVector[i]->y <= j) {
                     if (j % tilesVector[i]->y == 0 && k % tilesVector[i]->x == 0) {
-                        dp[i][j][k] = j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price;                     
+                        dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0);
                     }
                     else {
                     dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->x] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->y][k - tilesVector[i]->x] + tilesVector[i]->price);
@@ -53,7 +53,7 @@ void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
                 //         dp[i][j] = 0;
                 //     }
                 // }
-
+                std::cout << dp[i][j][k] << "\n";
             }
         }
     }
@@ -70,7 +70,7 @@ int main() {
     }
 
     std::vector<tile*> tilesVector;
-  
+    tilesVector.push_back(0);
 
     for (int i = 0; i < n; i++) {
         std::cin >> a >> b >> p;
