@@ -60,6 +60,9 @@ int main() {
     
     vectorDimensionCreator(dimensionVector, x, y);
 
+    for(int i = 0; i < x*y; i++) {
+        std::cout << dimensionVector[i]->x << ", " << dimensionVector[i]->y << "\n";
+    }
 
     return 0;
 }
