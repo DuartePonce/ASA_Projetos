@@ -1,38 +1,54 @@
 #include <iostream>
-using namespace std;
+#include <list>
+#include <vector>
+#include <chrono>
 
-// Função para calcular o máximo entre dois inteiros
-int max(int a, int b) {
-    return (a > b) ? a : b;
+struct dimension {
+    int x, y;
+};
+struct tile {
+    dimension dim;
+    int price;
+};
+void createDimension(dimension* dim, int x, int y) {
+    dim->x = x;
+    dim->y = y;
+}
+void createTile(tile* tile, dimension* dim, int p) {
+    tile->dim = *dim;
+    tile->price = p;
+}
+int max(int a, int b, int c) {
+   return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
 }
 
-// Função que implementa o algoritmo para maximizar o valor da mochila
-int knapsack(int W, int weights[], int values[], int n) {
-    int dp[n + 1][W + 1];
-
-    // Preenchendo a tabela dp[][] de maneira bottom-up
-    for (int i = 0; i <= n; i++) {
-        for (int w = 0; w <= W; w++) {
-            if (i == 0 || w == 0) {
-                dp[i][w] = 0;
-            } else if (weights[i - 1] <= w) {
-                dp[i][w] = max(values[i - 1] + dp[i][w - weights[i - 1]], dp[i - 1][w]);
-            } else {
-                dp[i][w] = dp[i - 1][w];
-            }
-        }
-    }
-
-    return dp[n][W]; // Retornando o valor máximo obtido para o peso W
-}
+// int knapsack(int W, int weights[], int values[], int n) {
+//     int dp[n + 1][W + 1];
+//     for (int i = 0; i <= n; i++) {
+//         for (int w = 0; w <= W; w++) {
+           
+//         }
+//     }
+//     return dp[n][W]; // Retornando o valor máximo obtido para o peso W
+// }
 
 int main() {
-    int W = 50; // Peso máximo da mochila
-    int weights[] = {10, 20, 30}; // Pesos das peças
-    int values[] = {60, 100, 120}; // Valores das peças
-    int n = sizeof(values) / sizeof(values[0]); // Número total de peças
+    int x, y, n, a, b, p;
+    std::cin >> x >> y >> n;
+    dimension* mainTile = new dimension;
+    createDimension(mainTile, x, y);
+    std::vector<tile*> tilesVector;
 
-    cout << "O valor máximo que pode ser obtido é: " << knapsack(W, weights, values, n) << endl;
+    for (int i = 0; i < n; i++) {
+        std::cin >> a >> b >> p;
+        dimension* dim = new dimension;
+        tile* tiles = new tile;
+        createDimension(dim, a, b);
+        createTile(tiles, dim, p);
+        tilesVector.push_back(tiles);
+    } 
+
+    
 
     return 0;
 }
