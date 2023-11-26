@@ -2,91 +2,88 @@
 #include <list>
 #include <vector>
 #include <chrono>
+#include <algorithm>
 
-typedef struct tile{
-    int x, y, price, quality; //Variable quality is only for testing for now i will work it out
-    struct tile* next;
-} tile;
+struct tile {
+    int x, y;
+    int price;
+};
 
-void createTile (tile* tile, int a, int b, int p, int q) { //Function that creates and gives the values of a tile
-    tile->x = a;
-    tile->y = b;
+void createTile(tile* tile, int x, int y, int p) {
+    tile->x = x;
+    tile->y = y;
     tile->price = p;
-    tile->quality = q;
-    tile->next = NULL;
 }
 
-void insertFuntion (tile** tileLinkedList, int a, int b, int p, int q) {
-    tile* tileList = *tileLinkedList;
-    tile* newTile = (tile*) malloc(sizeof(tile));
-    createTile(newTile, a, b, p, q);
+int max(int a, int b, int c, int d) {
+    return std::max(std::max(a, b), std::max(c, d));
+}
 
-    if (tileList == NULL) { //Verifies if the linked list has anyting
-        *tileLinkedList = newTile;//creates the first element of the list
-    } else {
-        while(tileList != NULL && q != 0){//iteration to go through the list q is bulshit for now there
+void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
+    int dp[n + 1][x + 1][y +1];
 
-            if(q >= tileList->quality) {//Cse to add in front
-                *tileLinkedList = newTile;
-                newTile->next = tileList;
-                q = 0;//bullshit
-            } else if (tileList->next != NULL && tileList->next->quality < q) { //Case to add in the middle 
-                tile* tileAuxiliar = tileList->next;//auxiliar tile pointer to save the integrity of the linked list
-                tileList->next = newTile;
-                newTile->next = tileAuxiliar;
-                q = 0;//bullshit
-            } else if (tileList->next == NULL) { //Case to add in the end
-                tileList->next = newTile;
-                q = 0;//bullshit
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= x; j++) {
+            for (int k = 0; k <= y; k++) {
+                //std::cout << i << ", " << j << ", " << k << "-";
+                if (i == 0 || j == 0 || k == 0) {
+                    dp[i][j][k] = 0;
+                }
+                else if (tilesVector[i]->x <= j && tilesVector[i]->y <= k) {
+                    if (j % tilesVector[i]->x == 0 && k % tilesVector[i]->y == 0) {
+                        dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0, 0);
+                    }
+                    else {
+                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->y + 1] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y + 1] + tilesVector[i]->price, dp[i][j][k-1]);
+                    }
+                }
+                else if (tilesVector[i]->x <= k && tilesVector[i]->y <= j) {
+                    if (j % tilesVector[i]->y == 0 && k % tilesVector[i]->x == 0) {
+                        dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0, 0);
+                    }
+                    else {
+                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->x + 1] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->y][k - tilesVector[i]->x + 1] + tilesVector[i]->price, dp[i][j][k-1]);
+                    }
+                }
+                else {
+                    dp[i][j][k] = 0;
+                }
+
+                // else {
+                //     if ( tilesVector[i]->dim.y > x || tilesVector[i]->dim.y > x ) {
+                //         dp[i][j] = 0;    
+                //     }
+                // }
+                //std::cout << dp[i][j][k] << "\n";
             }
-            tileList = tileList->next;
-
         }
     }
-}
-
-int totalTileValuation(tile** tileLinkedList, int x, int y) {
-    tile* tileList = *tileLinkedList;
-
-    if (tileList == NULL) {
-        return 0;
-    } else if (x == 0 || y == 0) {
-        return 0;
-    } else if (tileList->x > x || tileList->y > y) {
-
-        if (tileList->y <= x && tileList->x <= y) {
-            return tileList->price + totalTileValuation(&tileList, tileList->y, (y - tileList->x)) +
-                   totalTileValuation(&tileList, (x - tileList->y), tileList->x) + 
-                   totalTileValuation(&tileList, (x - tileList->y), (y - tileList->x));
-        }
-
-        return totalTileValuation(&tileList->next, x, y);
-    } else {
-        return tileList->price + totalTileValuation(&tileList, tileList->x, (y - tileList->y)) +
-           totalTileValuation(&tileList, (x - tileList->x), tileList->y) + 
-           totalTileValuation(&tileList, (x - tileList->x), (y - tileList->y));
-    }
+    std::cout << dp[n][x][y];
 }
 
 int main() {
-
     int x, y, n, a, b, p;
-    tile *tileLinkedList = NULL;
-    std::cin >> x >> y;
-    std::cin >> n;
 
-    for (int i = 1; i <= n; i++) {
-        std::cin >> a >> b >> p;
-        int quality = (x / a) * (y / b) * p;
-        insertFuntion(&tileLinkedList, a, b, p, quality);
-    } 
-    printf("%d\n", totalTileValuation(&tileLinkedList, x, y));
+    if (std::cin >> x >> y >> n && x > 0 && y > 0 && n > 0) {
+        std::vector<tile*> tilesVector;
+        tilesVector.push_back(0);
 
-    tile* tileList = tileLinkedList;
-    while (tileList != NULL) {
-        printf("%d\n", tileList->quality);
-        tileList = tileList->next;
+        for (int i = 0; i < n; i++) {
+            if (std::cin >> a >> b >> p && a > 0 && b > 0 && p > 0){
+                tile* tiles = new tile;
+                createTile(tiles, a, b, p);
+                tilesVector.push_back(tiles);
+            }
+            else{
+                return 0;
+            }
+        } 
+
+        Algorithm(tilesVector, x, y, n);
+        return 0;
+
+    } else {
+        return 0;
     }
 
-    return 0;
-}   
+} 
