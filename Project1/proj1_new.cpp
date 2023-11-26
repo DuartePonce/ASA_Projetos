@@ -34,7 +34,8 @@ void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
                         dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0, 0);
                     }
                     else {
-                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->y + 1] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y + 1] + tilesVector[i]->price, dp[i][j][k-1]);
+                        // Ve isto
+                        dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][j][k - tilesVector[i]->y + 1] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y + 1] + tilesVector[i]->price, dp[i][j][k-1]);
                     }
                 }
                 else if (tilesVector[i]->x <= k && tilesVector[i]->y <= j) {
@@ -42,18 +43,13 @@ void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
                         dp[i][j][k] = max ( j / tilesVector[i]->x * k / tilesVector[i]->y * tilesVector[i]->price, j / tilesVector[i]->y * k / tilesVector[i]->x * tilesVector[i]->price, 0, 0);
                     }
                     else {
-                    dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][x][k - tilesVector[i]->x + 1] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->y][k - tilesVector[i]->x + 1] + tilesVector[i]->price, dp[i][j][k-1]);
+                        // Ve isto
+                        dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][j][k - tilesVector[i]->x + 1] + tilesVector[i]->price, dp[i - 1][tilesVector[i]->y][k - tilesVector[i]->x + 1] + tilesVector[i]->price, dp[i][j][k-1]);
                     }
                 }
                 else {
                     dp[i][j][k] = 0;
                 }
-
-                // else {
-                //     if ( tilesVector[i]->dim.y > x || tilesVector[i]->dim.y > x ) {
-                //         dp[i][j] = 0;    
-                //     }
-                // }
                 std::cout << dp[i][j][k] << "\n";
             }
         }
