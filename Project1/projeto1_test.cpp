@@ -38,8 +38,8 @@ int algorithm(const std::vector<tile*>& tilesVector, int x, int y, int n) {
                     } else {
                         dp[i][j][k] = max(dp[i - 1][j][k],
                                           dp[i - 1][j][k - tilesVector[i]->y + 1] + tilesVector[i]->price,
-                                          dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y + 1] +
-                                          tilesVector[i]->price, dp[i][j][k - 1]);
+                                          dp[i - 1][tilesVector[i]->x][k - tilesVector[i]->y + 1] + tilesVector[i]->price, 
+                                          dp[i][j][k - 1]);
                     }
                 } else if (tilesVector[i]->x <= k && tilesVector[i]->y <= j) {
                     if (j % tilesVector[i]->y == 0 && k % tilesVector[i]->x == 0) {
@@ -54,6 +54,7 @@ int algorithm(const std::vector<tile*>& tilesVector, int x, int y, int n) {
                 } else {
                     dp[i][j][k] = 0;
                 }
+                std::cout << i << ", " << j << ", " << k << "-" << dp[i][j][k] << "\n";
             }
         }
     }
