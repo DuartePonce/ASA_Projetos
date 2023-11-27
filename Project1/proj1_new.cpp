@@ -21,6 +21,7 @@ int max(int a, int b, int c, int d) {
 
 void Algorithm(std::vector<tile*>& tilesVector, int x, int y, int n) {
     int dp[n + 1][x + 1][y +1];
+    std::cout << 0 << "\n";
 
     for (int i = 0; i <= n; i++) {
         for (int j = 0; j <= x; j++) {
@@ -68,7 +69,6 @@ int main() {
 
     std::vector<tile*> tilesVector;
     tilesVector.push_back(0);
-
     for (int i = 0; i < n; i++) {
         std::cin >> a >> b >> p;
 
@@ -77,7 +77,7 @@ int main() {
         createTile(tiles, a, b, p);
         tilesVector.push_back(tiles);
     } 
-    
+
     Algorithm(tilesVector, x, y, n);
 
 
