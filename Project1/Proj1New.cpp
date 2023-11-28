@@ -4,76 +4,81 @@
 #include <chrono>
 #include <algorithm>
 
-struct tile {
-    int x, y;
-    int price;
-};
 
-void createTile(tile* tile, int x, int y, int p) {
-    tile->x = x;
-    tile->y = y;
-    tile->price = p;
-}
-
-int funcAux1(int N, int M, int** P) { // este N e M vao ser o i e j no algoritmo
+int corteHoriz(int N, int M, int** P) { // este N e M vao ser o i e j no algoritmo
     int res = 0;
 
     for (int k = 1; k < M; ++k) {
-        std::max(res, P[N][k] + P[N][M - k]);
+        res = std::max(res, P[N][k] + P[N][M - k]);
     }
 
     return res;
 }
 
-int funcAux2(int N, int M, int** P) { // este N e M vao ser o i e j no algoritmo
+int corteVert(int N, int M, int** P) { // este N e M vao ser o i e j no algoritmo
     int res = 0;
 
     for (int k = 1; k < N; ++k) {
-        std::max(res, P[k][M] + P[N - k][M]);
+        res = std::max(res, P[k][M] + P[N - k][M]);
     }
 
     return res;
 }
 
-int Algorithm(int N, int M, int p, int** matrix) {
+int ProblemaXY(int N, int M, int** matrix, int** peca, int n) {
 
+    
+  
     for (int i = 0; i <= N; ++i) {
         for (int j = 0; j <= M; ++j) {
             if (i == 0 || j == 0) {
-               matrix[i][j] = 0;
+            matrix[i][j] = 0;
             } else {
-               matrix[i][j] = std::max( 1 , std::max(funcAux1(i, j, matrix), funcAux2(i, j, matrix)) ); // este 1 é o que eu ns oo que é
+                matrix[i][j] = std::max(std::max(peca[i][j], 0), std::max(corteHoriz(i, j, matrix), corteVert(i, j, matrix)) );
             }
         }
     }
-    return 0;
+    
+
+    return matrix[N][M];
 }
 
 int main() {
     int x, y, n, a, b, p;
     scanf("%d %d", &x, &y);
     scanf("%d", &n);
-    int res = 0;
+    //int res = 0;
 
     if ( n == 0) {
         std::cout << 0;
         return 0;
     }
 
+    
     int** matrix = new int*[x + 1];
-    for (int i = 0; i < x + 1; ++i) {
+    int** peca = new int*[x + 1];
+
+    for (int i = 0; i < x + 1; ++i) { //Arranjar !!
         matrix[i] = new int[y + 1];
+        peca[i] = new int[y + 1];
+        for (int j = 0; j < y + 1; ++j) {
+            peca[i][j] = 0;
+        }
     }
 
     for (int i = 0; i < n; i++) {
         scanf("%d %d %d", &a, &b, &p);
-
-        res = std::max(Algorithm(x, y, p, matrix), res);
+        if (a <= x && b <= y) {
+            peca[a][b] = std::max(peca[a][b], p);
+            if (b <= x && a <= y) {
+                peca[b][a] = std::max(peca[b][a], p);
+            }
+        }   
     } 
 
-    printf("%d", res);
 
-
+    printf("%d\n", ProblemaXY(x, y, matrix, peca, n));
+    
 
     return 0;
 }
