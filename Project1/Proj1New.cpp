@@ -21,17 +21,15 @@ int ProblemaXY(int N, int M, int** matrix, int n) {
             matrix[i][j] = 0;
             } else {
                 matrix[i][j] = std::max(std::max(matrix[i][j], 0), std::max(corteHoriz(i, j, matrix), corteVert(i, j, matrix)) );
-            }  }  }
+            }  
+        }
+    }
     return matrix[N][M];
 }
 int main() {
     int x, y, n, a, b, p;
     scanf("%d %d", &x, &y);
     scanf("%d", &n);
-    if ( n == 0) {
-        printf("0");
-        return 0;
-    }
     int** matrix = new int*[x + 1];
     for (int i = 0; i < x + 1; ++i) {
         matrix[i] = new int[y + 1];
