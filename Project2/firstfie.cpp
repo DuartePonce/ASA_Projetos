@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <vector>
 
-void grafo_denso(int n, int m) {
+void grafo_esparso(int n, int m) {
     std::vector<std::vector<int>> grafo(n + 1);
     int v1, v2;
     for (int i = 0; i <= m; ++i) {
@@ -10,7 +10,7 @@ void grafo_denso(int n, int m) {
         grafo[v1].push_back(v2); 
     }
 }
-void grafo_esparso(int n, int m) {
+void grafo_denso(int n, int m) {
     int v1, v2;
     int** grafo = new int*[n + 1];
     for (int i = 0; i < n + 1; ++i) {
