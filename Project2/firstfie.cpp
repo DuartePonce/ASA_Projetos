@@ -1,10 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-// typedef struct grafo {
-// int vertice;
-// grafo* next;
-// } grafo;
 
 void grafo_denso(int n, int m) {
     std::vector<std::vector<int>> grafo(n + 1);
