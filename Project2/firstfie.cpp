@@ -30,10 +30,10 @@ int main() {
     scanf("%d %d", &n, &m);
 
     double densidade = (2.0 * m) / (n * (n - 1));
-    grafo_esparso(n, m);
     if (densidade >= 0.5) { //Caso denso
+        grafo_denso(n, m);
     } else {// Caso esparso
-    
+        grafo_esparso(n, m);
     }
     return 0;
 }
