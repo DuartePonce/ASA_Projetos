@@ -10,7 +10,7 @@ class Vertex {
         int d = 0;
         int f = 0;
         int pi = 0;
-        std::vector<Vertex> adj; // List of vertex that the specific vertex points to
+        std::vector<Vertex*> adj; // List of vertex that the specific vertex points to
     
         // Constructors
         Vertex() : id(0) {} // Default constructor
@@ -31,43 +31,52 @@ void Vertex::addEdge(int v1, int v2, std::unordered_map<int, Vertex>& vertexMap)
         vertexMap[v2] = Vertex(v2);
     }
     // Now add the edge
-    vertexMap[v1].adj.push_back(vertexMap[v2]);
+    vertexMap[v1].adj.push_back(&vertexMap[v2]);
 }
+
 
 void printGraph(const std::unordered_map<int, Vertex>& vertexMap) {
     for (const auto& entry : vertexMap) {
         std::cout << "Vertex " << entry.first << " -> ";
         for (const auto& adjVertex : entry.second.adj) {
-            std::cout << adjVertex.id << " ";
+            std::cout << adjVertex->id << " ";
         }
         std::cout << std::endl;
     }
 }
 
-void DFS_Visit(std::unordered_map<int, Vertex>& vertexMap, Vertex& u, int& time) {
-    u.color = 1;
-    u.d = time;
+void DFS_Visit(std::unordered_map<int, Vertex>& vertexMap, Vertex* u, int time) {
+    u->color = 1;
+    u->d = time;
     time++;
-    for (int j = 0; j < (int) u.adj.size(); ++j) {
-        if (u.adj[j].color == 0) {
-            u.adj[j].pi = u.id;
-            DFS_Visit(vertexMap, u.adj[j], time);
+    for (int j = 0; j < (int) u->adj.size(); ++j) {
+        printf("j: %d\n", j);
+        printf("%d of cicle of vertex: %d\n", time, u->id);
+        if (u->adj[j]->color == 0) {
+            u->adj[j]->pi = u->id;
+            DFS_Visit(vertexMap, u->adj[j], time);
+            continue;
+        }
+        else {
+            u->adj[j]->pi = u->id;
+            DFS_Visit(vertexMap, u->adj[j], time);
+            continue;
         }
     }
-    u.color = 2;
-    u.f = time;
-    time++;
-    vertexMap[u.id] = u;
+    u->color = 2;
+    u->f = u->d;
+    // time++;
+    vertexMap[u->id] = *u;
 }
 
 
 void DFS(std::unordered_map<int, Vertex>& vertexMap, std::vector<int>& roots) {
-    int time = 1;
+    int time = 0;
     for (int i = 0; i <= (int) roots.size(); ++i) {
         auto it = vertexMap.find(roots[i]);
         if (it != vertexMap.end()) {
-            
-            DFS_Visit(vertexMap, it->second, time);
+            printf("id DFS: %d\n", it->second.id);
+            DFS_Visit(vertexMap, &it->second, time);
         }
     }
 }
@@ -100,7 +109,7 @@ int main() {
     DFS(vertexMap, roots);
     int res = 0;
     for (const auto& entry : vertexMap) {
-        res = std::max(res, entry.second.d);
+        res = std::max(res, entry.second.f);
         
     }
     printf("%d", res);
