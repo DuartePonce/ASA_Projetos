@@ -3,13 +3,13 @@
 #include <vector>   
 #include <unordered_map>
 
+
+
 class Vertex {
     public :
         int id; // Number of the vertex
         int color = 0; // 0 = white 1 = grey 2 = black;
-        int d = 0;
         int f = 0;
-        int pi = 0;
         std::vector<Vertex*> adj; // List of vertex that the specific vertex points to
     
         // Constructors
@@ -45,43 +45,27 @@ void printGraph(const std::unordered_map<int, Vertex>& vertexMap) {
     }
 }
 
-void DFS_Visit(std::unordered_map<int, Vertex>& vertexMap, Vertex* u, int time) {
+void DFS_Visit(std::unordered_map<int, Vertex>& vertexMap, Vertex* u) {
     u->color = 1;
-    u->d = time;
-    time++;
     for (int j = 0; j < (int) u->adj.size(); ++j) {
-        printf("j: %d\n", j);
-        printf("%d of cicle of vertex: %d\n", time, u->id);
         if (u->adj[j]->color == 0) {
-            u->adj[j]->pi = u->id;
-            DFS_Visit(vertexMap, u->adj[j], time);
-            continue;
+            DFS_Visit(vertexMap, u->adj[j]);
         }
-        else {
-            u->adj[j]->pi = u->id;
-            DFS_Visit(vertexMap, u->adj[j], time);
-            continue;
-        }
+        u->f = std::max(u->f, u->adj[j]->f + 1);
     }
     u->color = 2;
-    u->f = u->d;
-    // time++;
     vertexMap[u->id] = *u;
 }
 
 
 void DFS(std::unordered_map<int, Vertex>& vertexMap, std::vector<int>& roots) {
-    int time = 0;
     for (int i = 0; i <= (int) roots.size(); ++i) {
         auto it = vertexMap.find(roots[i]);
         if (it != vertexMap.end()) {
-            printf("id DFS: %d\n", it->second.id);
-            DFS_Visit(vertexMap, &it->second, time);
+            DFS_Visit(vertexMap, &it->second);
         }
     }
 }
-
-
 
 int main() { 
     int n, m, v1, v2;
@@ -105,14 +89,14 @@ int main() {
             roots.erase(it);
         }
     }
-    printGraph(vertexMap);
+    //printGraph(vertexMap);
     DFS(vertexMap, roots);
     int res = 0;
     for (const auto& entry : vertexMap) {
         res = std::max(res, entry.second.f);
         
     }
-    printf("%d", res);
+    printf("%d\n", res);
 
     return 0;
 }
