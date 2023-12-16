@@ -1,102 +1,54 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>   
-#include <unordered_map>
+#include <vector>
 
 
 
-class Vertex {
-    public :
-        int id; // Number of the vertex
-        int color = 0; // 0 = white 1 = grey 2 = black;
-        int f = 0;
-        std::vector<Vertex*> adj; // List of vertex that the specific vertex points to
-    
-        // Constructors
-        Vertex() : id(0) {} // Default constructor
 
-        Vertex(int vertexId) : id(vertexId) {}
-        
-        void addEdge(int v1, int v2, std::unordered_map<int, Vertex>& vertexMap);
-
-};
-
-void Vertex::addEdge(int v1, int v2, std::unordered_map<int, Vertex>& vertexMap) {
-    // Check if v1 vertex exists, if not, create it
-    if (vertexMap.find(v1) == vertexMap.end()) {
-        vertexMap[v1] = Vertex(v1);
-    }
-    // Check if v2 vertex exists, if not, create it
-    if (vertexMap.find(v2) == vertexMap.end()) {
-        vertexMap[v2] = Vertex(v2);
-    }
-    // Now add the edge
-    vertexMap[v1].adj.push_back(&vertexMap[v2]);
-}
-
-
-void printGraph(const std::unordered_map<int, Vertex>& vertexMap) {
-    for (const auto& entry : vertexMap) {
-        std::cout << "Vertex " << entry.first << " -> ";
-        for (const auto& adjVertex : entry.second.adj) {
-            std::cout << adjVertex->id << " ";
-        }
-        std::cout << std::endl;
-    }
-}
-
-void DFS_Visit(std::unordered_map<int, Vertex>& vertexMap, Vertex* u) {
-    u->color = 1;
-    for (int j = 0; j < (int) u->adj.size(); ++j) {
-        if (u->adj[j]->color == 0) {
-            DFS_Visit(vertexMap, u->adj[j]);
-        }
-        u->f = std::max(u->f, u->adj[j]->f + 1);
-    }
-    u->color = 2;
-    vertexMap[u->id] = *u;
-}
-
-
-void DFS(std::unordered_map<int, Vertex>& vertexMap, std::vector<int>& roots) {
-    for (int i = 0; i <= (int) roots.size(); ++i) {
-        auto it = vertexMap.find(roots[i]);
-        if (it != vertexMap.end()) {
-            DFS_Visit(vertexMap, &it->second);
-        }
-    }
-}
-
-int main() { 
-    int n, m, v1, v2;
-    scanf("%d %d", &n, &m);
-
-    std::unordered_map<int, Vertex> vertexMap;
-    vertexMap.reserve(n); // Reserving memory for n elements to prevent mmemory leaks
-
-
-    std::vector<int> roots(n);
-    for (int i = 0; i < n; ++i) {
-        roots[i] = i + 1;
-    }
-    Vertex v(0);
-    for (int i = 0; i < m; ++i) {
-        scanf("%d %d", &v1, &v2);
-        v.addEdge(v1, v2, vertexMap);
-
-        auto it = std::find(roots.begin(), roots.end(), v2);
-        if (it != roots.end() || *it == v2) {
-            roots.erase(it);
-        }
-    }
-    //printGraph(vertexMap);
-    DFS(vertexMap, roots);
+int DFS_Visit(std::vector<std::vector<int>> grafo, std::vector<int> colors, int i) {
+    // a cena da cor é importante mas como?
     int res = 0;
-    for (const auto& entry : vertexMap) {
-        res = std::max(res, entry.second.f);
-        
+    int prev = 0;
+    colors[i] = 1;
+    for (int j = 0; j < (int) grafo[i].size(); j++) {
+        if (colors[grafo[i][j]] == 0) {
+            prev = DFS_Visit(grafo, colors, grafo[i][j]);
+        }
+        res = std::max(res, 1 + prev);
+    }
+    
+    return res;
+}
+
+void DFS(std::vector<std::vector<int>> grafo, std::vector<int> colors, int n) {
+    int res = 0;
+    // Maybe mudar os valores 1 para 0 e depois -1 para fechar ou assim ns bem
+    for (int i = 1; i <= n; i++) {
+        if (colors[i] == 0) {
+            res = std::max(res, DFS_Visit(grafo, colors, i));
+        }
     }
     printf("%d\n", res);
+}
+
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+
+    int v1, v2;
+    std::vector<std::vector<int>> grafo(n + 1);
+    std::vector<int> colors(n + 1);
+
+    for (int i = 1; i <= n; ++i) {
+        colors[i] = 0; // cor 0-Branco 1-Cinzento 2-Preto
+    }
+
+    for (int i = 0; i < m; ++i) {
+        scanf("%d %d", &v1, &v2);
+        grafo[v1].push_back(v2);
+    }
+    
+    DFS(grafo, colors, n);
 
     return 0;
 }
