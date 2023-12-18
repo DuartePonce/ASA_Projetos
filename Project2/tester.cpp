@@ -2,25 +2,26 @@
 #include <algorithm>
 #include <vector>
 
-int SCC = 0;
+int SCC = 1;
 
 
 void DFS_visit_SCC(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int i, std::vector<std::vector<int>>& grafo_final, std::vector<int>& stack_SCC) {
     colors[i] = 1;
 
     for (int j = 0; j < (int)grafo[i].size(); j++) {
-
-        if (stack_SCC[i] != stack_SCC[grafo[i][j]]) {
-            grafo_final[i].push_back(grafo[i][j]);
+        if (colors[grafo[i][j]] == 0 && stack_SCC[i] != stack_SCC[grafo[i][j]]) {
+            printf("color: %d - stack[i]: %d - stacj[grafo]: %d\n",colors[i], stack_SCC[i], stack_SCC[grafo[i][j]]);
+            grafo_final[stack_SCC[i]].push_back(stack_SCC[grafo[i][j]]);
         }
     }   
 }
 
-void DFS_SCC(std::vector<std::vector<int>>& grafo, int n, std::vector<std::vector<int>>& grafo_final, std::vector<int>& stack_SCC) {
-    std::vector<int> colors(n + 1, 0);
+void DFS_SCC(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int n, std::vector<std::vector<int>>& grafo_final, std::vector<int>& stack_SCC) {
 
-    for (int i = 1; i < n; i++) {
+
+    for (int i = 1; i <= n; i++) {
         if (colors[i] == 0) {
+            printf("i : %d\n", i);
             DFS_visit_SCC(grafo, colors, i, grafo_final, stack_SCC);
         }
     }
@@ -102,21 +103,21 @@ int main() {
     DFS_transposta(transposto, colors, n, priority_list, stack_SCC);
     std::fill(colors.begin(), colors.end(), 0);
 
-    std::vector<std::vector<int>> grafo_final(n + 1);
+    std::vector<std::vector<int>> grafo_final(SCC);
 
-    DFS_SCC(grafo, n, grafo_final, stack_SCC);
+    DFS_SCC(grafo, colors, n, grafo_final, stack_SCC);
 
-    for (int i  = 1 ; i <= n; i++) {
+    for (int i  = 0 ; i < (int) grafo_final.size(); i++) {
         printf("%d -> ", i);
-        for (int j = 0 ; j < (int) grafo[i].size(); j++) {
+        for (int j = 0 ; j < (int) grafo_final[i].size(); j++) {
             printf("%d ", j);
         }
         printf("\n");
     }
-
     std::fill(colors.begin(), colors.end(), 0);
     std::fill(ft.begin(), ft.end(), 0);
 
+    printf("ola\n");
     DFS(grafo_final, colors, ft, n, priority_list);
 
     int res = 0;
