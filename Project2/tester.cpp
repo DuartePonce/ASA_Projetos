@@ -35,10 +35,12 @@ int main() {
     std::vector<std::vector<int>> transposto(n + 1);
     std::vector<int> colors(n + 1);
     std::vector<int> ft(n + 1);
+    std::vector<int> priority_list(n, 0);
 
     for (int i = 1; i <= n; ++i) {
         colors[i] = 0; // cor 0-Branco 1-Cinzento 2-Preto
         ft[i] = 0;
+        priority_list[i-1] = i;
     }
 
     for (int i = 0; i < m; ++i) {
@@ -48,14 +50,29 @@ int main() {
     }
     
     DFS(grafo, colors, ft, n);
+    std::fill(colors.begin(), colors.end(), 0);
 
-
+    std::vector<int> aux = ft;
+    int res = 0;
+    int index = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n + 1; ++j) {
+            if ( res < aux[j]) {
+                index = j;
+                res = aux[j];
+            }
+        }
+        aux[index] = 0;
+        priority_list[i] = index;
+        res = 0;
+        index = 0;
+    }
 
     int res = 0;
     for (int i = 1; i <= n; ++i) {
         res = std::max(res, ft[i]);
     }
     printf("%d\n",res);
-    
+
     return 0;
 }
