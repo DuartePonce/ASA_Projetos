@@ -7,33 +7,44 @@
 // kasaraju
 int SCC = 1;
 
+void DFS_final(std::vector<std::vector<int>>& grafo) {
+    std::vector<int> colors(SCC, 0); // 0 = white, 1 = gray, 2 = black
+    std::stack<int> stack;
+    std::vector<int> ft(SCC, 0);
+    int previous = 0;
+    ft[0] = -1;
+    for (int i = 1; i < SCC; ++i) {
+            previous = 0;
+        if (colors[i] == 0) {
+            stack.push(i);
+            while (!stack.empty()) {
+                int current = stack.top();
+                //printf("current: %d, color: %d\n", current, colors[current]);
 
-void DFS_Visit_final(std::vector<std::vector<int>>& graph, int node, std::vector<int>& longestPath, std::vector<bool>& visited) {
-    visited[node] = true;
-    for (int neighbor : graph[node]) {
-        if (!visited[neighbor]) {
-            DFS_Visit_final(graph, neighbor, longestPath, visited);
+                if (colors[current] == 0) {
+                    colors[current] = 1;
+                    for (int j = 0; j < (int) grafo[current].size(); j++) {
+                        if (colors[grafo[current][j]] == 0) {
+                            stack.push(grafo[current][j]);
+                        }
+                    }
+                } else {
+                    if (colors[current] == 1) {
+                        ft[current] = std::max(ft[previous] + 1, ft[current]);
+                        previous = current;
+                    }
+                    colors[current] = 2;
+                    stack.pop();
+                }
+            }
         }
-        longestPath[node] = std::max(longestPath[node], 1 + longestPath[neighbor]);
     }
-}
-
-void DFS_final(std::vector<std::vector<int>>& graph) {
-    int nodes = graph.size();
-    std::vector<bool> visited(nodes, false);
-    std::vector<int> longestPath(nodes, 0);
-
-    for (int i = 0; i < nodes; ++i) {
-        if (!visited[i]) {
-            DFS_Visit_final(graph, i, longestPath, visited);
-        }
+    int res = 0;
+    for (int i = 0; i < (int) ft.size(); i++) {
+        //printf("%d ", ft[i]);
+        res = std::max(res, ft[i]);
     }
-
-    int maxLength = 0;
-    for (int length : longestPath) {
-        maxLength = std::max(maxLength, length);
-    }
-    printf("%d\n", maxLength);
+    printf("%d\n", res);
 }
 
 
