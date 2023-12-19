@@ -4,32 +4,70 @@
 #include <stack>
 // txt5 15
 // txt4 5 certo 
+// kasaraju
 int SCC = 1;
 
-int DFS_Visit_final(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int i) {
-    int son = 0;
-    colors[i] = 1;
-    for (int j = 0; j < (int) grafo[i].size(); j++) {
-        if (colors[grafo[i][j]] == 0) {
-            son = std::max(son, 1 + DFS_Visit_final(grafo, colors, grafo[i][j]));
-        }
-    }
+// int DFS_Visit_final(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int i) {
+//     int son = 0;
+//     colors[i] = 1;
+//     for (int j = 0; j < (int) grafo[i].size(); j++) {
+//         if (colors[grafo[i][j]] == 0) {
+//             son = std::max(son, 1 + DFS_Visit_final(grafo, colors, grafo[i][j]));
+//         }
+//     }
 
-    return son;
-}
+//     return son;
+// }
+// void DFS_final(std::vector<std::vector<int>>& grafo) {
+//     std::vector<int> colors(SCC, 0);
+//     int res = 0;
+
+//     for (int i = 1; i < SCC; i++) {
+//         if (colors[i] == 0) {
+//             res = std::max(res, DFS_Visit_final(grafo, colors, i));
+//         }
+//     }
+
+//     printf("%d\n", res);
+// }
 void DFS_final(std::vector<std::vector<int>>& grafo) {
-    std::vector<int> colors(SCC, 0);
-    int res = 0;
+    std::vector<int> colors(SCC, 0); // 0 = white, 1 = gray, 2 = black
+    std::stack<int> stack;
+    std::vector<int> ft(SCC, 0);
 
-    for (int i = 1; i < SCC; i++) {
+    for (int i = 1; i < SCC; ++i) {
         if (colors[i] == 0) {
-            res = std::max(res, DFS_Visit_final(grafo, colors, i));
+            stack.push(i);
+            while (!stack.empty()) {
+                int current = stack.top();
+
+                if (colors[current] == 0) {
+                    colors[current] = 1;
+                    for (int j = 0; j < (int) grafo[current].size(); j++) {
+                        if (colors[grafo[current][j]] == 0) {
+                            ft[grafo[current][j]] = 1 + ft[grafo[current][j]];
+                            stack.push(grafo[current][j]);
+                        }
+                    }
+                } else {
+                    if (colors[current] == 1) {
+
+
+                    }
+                    //ft[current] = std::max(ft[current], 1 + ft[grafo[current][j]]);
+                    colors[current] = 2;
+                    stack.pop();
+                }
+            }
         }
     }
-
+    int res = 0;
+    for (int i = 0; i < (int) ft.size(); i++) {
+        //printf("%d ", ft[i]);
+        res = std::max(res, ft[i]);
+    }
     printf("%d\n", res);
 }
-
 
 
 void SCC_builder(std::vector<std::vector<int>>& grafo, int n, std::vector<std::vector<int>>& grafo_final, std::vector<int>& stack_SCC) {
@@ -76,7 +114,7 @@ void DFS_transposta(std::vector<std::vector<int>>& grafo, int n, std::vector<int
 }
 
 void DFS(std::vector<std::vector<int>>& grafo, int n, std::vector<int>& priority_list) {
-    std::vector<int> colors(n + 1, 0);
+    std::vector<int> colors(n + 1, 0); // 0 = white, 1 = gray, 2 = black
     std::stack<int> stack;
 
     for (int i = 1; i <= n; ++i) {
@@ -84,25 +122,27 @@ void DFS(std::vector<std::vector<int>>& grafo, int n, std::vector<int>& priority
             stack.push(i);
             while (!stack.empty()) {
                 int current = stack.top();
-                bool hasChild = false;
-                colors[current] = 1;
-
-                for (int j = 0; j < (int) grafo[current].size(); j++) {
-                    if (colors[grafo[current][j]] == 0) {
-                        stack.push(grafo[current][j]);
-                        colors[grafo[current][j]] = 1;
-                        hasChild = true;
+                //printf("current: %d\n", current);
+                if (colors[current] == 0) {
+                    colors[current] = 1;
+                    for (int j = 0; j < (int) grafo[current].size(); j++) {
+                        if (colors[grafo[current][j]] == 0) {
+                            stack.push(grafo[current][j]);
+                        }
                     }
-                }
-
-                if (!hasChild) {
+                } else {
+                    if (colors[current] == 1) {
+                        priority_list.insert(priority_list.begin(), current);
+                    }
+                    colors[current] = 2;
                     stack.pop();
-                    priority_list.insert(priority_list.begin(), current);
                 }
             }
         }
     }
 }
+
+
 
 int main() {
     int n, m;
@@ -121,24 +161,24 @@ int main() {
         transposto[v2].push_back(v1);
     }
 
-    for (int i = 1; i<=n; i++) {
-        printf("%d -> ", i);
-        for (int j = 0; j < (int) grafo[i].size();j++) {
-            printf("%d ", grafo[i][j]);
-        }
-        printf("\n");
-    }
+    // for (int i = 1; i<=n; i++) {
+    //     printf("%d -> ", i);
+    //     for (int j = 0; j < (int) grafo[i].size();j++) {
+    //         printf("%d ", grafo[i][j]);
+    //     }
+    //     printf("\n");
+    // }
 
     DFS(grafo, n, priority_list);
     
-    printf("\n");
-    printf("\n");
+    // printf("\n");
+    // printf("\n");
 
-    printf("priority list:\n");
-    for (int i = 0; i<(int) priority_list.size(); i++) {
-        printf("%d ", priority_list[i]);
-    }
-    printf("\n");
+    // printf("priority list:\n");
+    // for (int i = 0; i<(int) priority_list.size(); i++) {
+    //     printf("%d ", priority_list[i]);
+    // }
+    // printf("\n");
 
     // printf("trasposto\n");
     // for (int i = 1; i<=n; i++) {
@@ -153,11 +193,11 @@ int main() {
 
     DFS_transposta(transposto, n, priority_list, stack_SCC);
     
-    printf("lista com os valores de SCC:\n");
-    for (int i = 0; i < (int) stack_SCC.size(); i++) {
-        printf("%d i-> %d\n", i, stack_SCC[i]);
-    }
-    printf("\n");
+    // printf("lista com os valores de SCC:\n");
+    // for (int i = 0; i < (int) stack_SCC.size(); i++) {
+    //     printf("%d i-> %d\n", i, stack_SCC[i]);
+    // }
+    // printf("\n");
 
     std::vector<std::vector<int>> grafo_final(SCC);
 
