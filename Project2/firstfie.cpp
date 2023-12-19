@@ -7,29 +7,6 @@
 // kasaraju
 int SCC = 1;
 
-// int DFS_Visit_final(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int i) {
-//     int son = 0;
-//     colors[i] = 1;
-//     for (int j = 0; j < (int) grafo[i].size(); j++) {
-//         if (colors[grafo[i][j]] == 0) {
-//             son = std::max(son, 1 + DFS_Visit_final(grafo, colors, grafo[i][j]));
-//         }
-//     }
-
-//     return son;
-// }
-// void DFS_final(std::vector<std::vector<int>>& grafo) {
-//     std::vector<int> colors(SCC, 0);
-//     int res = 0;
-
-//     for (int i = 1; i < SCC; i++) {
-//         if (colors[i] == 0) {
-//             res = std::max(res, DFS_Visit_final(grafo, colors, i));
-//         }
-//     }
-
-//     printf("%d\n", res);
-// }
 void DFS_final(std::vector<std::vector<int>>& grafo) {
     std::vector<int> colors(SCC, 0); // 0 = white, 1 = gray, 2 = black
     std::stack<int> stack;
@@ -51,7 +28,7 @@ void DFS_final(std::vector<std::vector<int>>& grafo) {
                     }
                 } else {
                     if (colors[current] == 1) {
-
+                        ft[current] = 1 + ft[current];
 
                     }
                     //ft[current] = std::max(ft[current], 1 + ft[grafo[current][j]]);
@@ -193,24 +170,24 @@ int main() {
 
     DFS_transposta(transposto, n, priority_list, stack_SCC);
     
-    // printf("lista com os valores de SCC:\n");
-    // for (int i = 0; i < (int) stack_SCC.size(); i++) {
-    //     printf("%d i-> %d\n", i, stack_SCC[i]);
-    // }
-    // printf("\n");
+    printf("lista com os valores de SCC:\n");
+    for (int i = 0; i < (int) stack_SCC.size(); i++) {
+        printf("%d i-> %d\n", i, stack_SCC[i]);
+    }
+    printf("\n");
 
     std::vector<std::vector<int>> grafo_final(SCC);
 
     SCC_builder(grafo, n, grafo_final, stack_SCC);
 
-    // printf("grafo aciclico:\n");
-    // for (int i = 1; i < (int) grafo_final.size(); i++) {
-    //     printf("%d ->", i);
-    //     for (int j = 0; j < (int) grafo_final[i].size(); j++) {
-    //         printf("%d ", grafo_final[i][j]);
-    //     }
-    //     printf("\n");
-    // }
+    printf("grafo aciclico:\n");
+    for (int i = 1; i < (int) grafo_final.size(); i++) {
+        printf("%d ->", i);
+        for (int j = 0; j < (int) grafo_final[i].size(); j++) {
+            printf("%d ", grafo_final[i][j]);
+        }
+        printf("\n");
+    }
 
     DFS_final(grafo_final);
 
