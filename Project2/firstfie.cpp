@@ -2,7 +2,8 @@
 #include <algorithm>
 #include <vector>
 #include <stack>
-
+// txt5 15
+// txt4 5 certo 
 int SCC = 1;
 
 int DFS_Visit_final(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int i) {
@@ -120,24 +121,24 @@ int main() {
         transposto[v2].push_back(v1);
     }
 
-    // for (int i = 1; i<=n; i++) {
-    //     printf("%d -> ", i);
-    //     for (int j = 0; j < (int) grafo[i].size();j++) {
-    //         printf("%d ", grafo[i][j]);
-    //     }
-    //     printf("\n");
-    // }
+    for (int i = 1; i<=n; i++) {
+        printf("%d -> ", i);
+        for (int j = 0; j < (int) grafo[i].size();j++) {
+            printf("%d ", grafo[i][j]);
+        }
+        printf("\n");
+    }
 
     DFS(grafo, n, priority_list);
     
-    // printf("\n");
-    // printf("\n");
+    printf("\n");
+    printf("\n");
 
-    // printf("priority list:\n");
-    // for (int i = 0; i<(int) priority_list.size(); i++) {
-    //     printf("%d ", priority_list[i]);
-    // }
-    // printf("\n");
+    printf("priority list:\n");
+    for (int i = 0; i<(int) priority_list.size(); i++) {
+        printf("%d ", priority_list[i]);
+    }
+    printf("\n");
 
     // printf("trasposto\n");
     // for (int i = 1; i<=n; i++) {
