@@ -138,7 +138,7 @@ int main() {
     //     printf("%d ", priority_list[i]);
     // }
     // printf("\n");
-    
+
     // printf("trasposto\n");
     // for (int i = 1; i<=n; i++) {
     //     printf("%d -> ", i);
@@ -152,11 +152,11 @@ int main() {
 
     DFS_transposta(transposto, n, priority_list, stack_SCC);
     
-    // printf("lista com os valores de SCC:\n");
-    // for (int i = 0; i < (int) stack_SCC.size(); i++) {
-    //     printf("%d i-> %d\n", i, stack_SCC[i]);
-    // }
-    // printf("\n");
+    printf("lista com os valores de SCC:\n");
+    for (int i = 0; i < (int) stack_SCC.size(); i++) {
+        printf("%d i-> %d\n", i, stack_SCC[i]);
+    }
+    printf("\n");
 
     std::vector<std::vector<int>> grafo_final(SCC);
 
