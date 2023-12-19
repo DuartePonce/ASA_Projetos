@@ -11,27 +11,27 @@ void DFS_final(std::vector<std::vector<int>>& grafo) {
     std::vector<int> colors(SCC, 0); // 0 = white, 1 = gray, 2 = black
     std::stack<int> stack;
     std::vector<int> ft(SCC, 0);
-
+    int previous = 0;
     for (int i = 1; i < SCC; ++i) {
+            previous = 0;
         if (colors[i] == 0) {
             stack.push(i);
             while (!stack.empty()) {
                 int current = stack.top();
+                printf("current: %d, color: %d\n", current, colors[current]);
 
                 if (colors[current] == 0) {
                     colors[current] = 1;
                     for (int j = 0; j < (int) grafo[current].size(); j++) {
                         if (colors[grafo[current][j]] == 0) {
-                            ft[grafo[current][j]] = 1 + ft[grafo[current][j]];
                             stack.push(grafo[current][j]);
                         }
                     }
                 } else {
                     if (colors[current] == 1) {
-                        ft[current] = 1 + ft[current];
-
+                        ft[current] = std::max(ft[previous] + 1, ft[current]);
+                        previous = current;
                     }
-                    //ft[current] = std::max(ft[current], 1 + ft[grafo[current][j]]);
                     colors[current] = 2;
                     stack.pop();
                 }
