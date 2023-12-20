@@ -42,7 +42,6 @@ void DFS_final(std::vector<std::vector<int>>& grafo, std::vector<int>& stack_SCC
             }
         }
     }
-
     printf("%d\n", maxLength);
 }
 
@@ -141,10 +140,6 @@ int main() {
 
     DFS(grafo, n, priority_list);
     DFS_transposta(transposto, n, priority_list, stack_SCC);
-    for(int i =0; i<stack_SCC.size();i++) {
-        printf("%d ", stack_SCC[i]);
-    }
-    printf("\n");
 
     std::vector<std::vector<int>> grafo_final(SCC);
 
