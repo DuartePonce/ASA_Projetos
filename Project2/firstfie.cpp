@@ -5,15 +5,15 @@
 
 int SCC = 1;
 
-void DFS_final(std::vector<std::vector<int>>& grafo) {
+void DFS_final(std::vector<std::vector<int>>& grafo, std::vector<int>& stack_SCC) {
     std::vector<int> colors(SCC, 0); // 0 = white, 1 = gray, 2 = black
     std::stack<int> stack;
     std::vector<int> longestPath(SCC, 0);
     int maxLength = 0;
 
-    for (int i = 1; i < (int) grafo.size(); ++i) {
-        if (colors[i] == 0) {
-            stack.push(i);
+    for (int i = 1; i < (int) stack_SCC.size(); ++i) {
+        if (colors[stack_SCC[i]] == 0) {
+            stack.push(stack_SCC[i]);
 
             while (!stack.empty()) {
                 int current = stack.top();
@@ -24,18 +24,11 @@ void DFS_final(std::vector<std::vector<int>>& grafo) {
                         if (colors[grafo[current][j]] == 0) {
                             stack.push(grafo[current][j]);
                         }
+                        longestPath[grafo[current][j]] = std::max(longestPath[current]+1, longestPath[grafo[current][j]]);
                     }
                     
                     
                 } else {
-                    if (colors[current] == 1) {
-                        for (int j = 0; j < (int) grafo[current].size(); j++) {
-                            stack.push(grafo[current][j]);
-                            longestPath[current] = std::max(longestPath[current], 1 + longestPath[grafo[current][j]]);       
-
-                        }
-                        maxLength = std::max(maxLength, longestPath[current]);
-                    }
                     colors[current] = 2;
                     stack.pop();
                 }
@@ -43,6 +36,9 @@ void DFS_final(std::vector<std::vector<int>>& grafo) {
         }
     }
 
+    for (int i = 0; i < (int) longestPath.size(); i++) {
+        maxLength = std::max(maxLength, longestPath[i]);
+    }
     printf("%d\n", maxLength);
 }
 
@@ -120,9 +116,11 @@ void DFS(std::vector<std::vector<int>>& grafo, int n, std::vector<int>& priority
 
 
 int main() {
+    std::ios::sync_with_stdio(0);  // Disable sync with C libs (printf/scanf)
     int n, m;
     int v1, v2;
-    scanf("%d %d", &n, &m);
+    std::cin >> n >> m;
+    std::cin.tie(0);
 
     std::vector<std::vector<int>> grafo(n + 1);
     std::vector<std::vector<int>> transposto(n + 1);
@@ -131,7 +129,8 @@ int main() {
 
 
     for (int i = 0; i < m; ++i) {
-        scanf("%d %d", &v1, &v2);
+        std::cin >> v1 >> v2;
+        std::cin.tie(0);
         grafo[v1].push_back(v2);
         transposto[v2].push_back(v1);
     }
@@ -144,7 +143,7 @@ int main() {
 
     SCC_builder(grafo, n, grafo_final, stack_SCC);
 
-    DFS_final(grafo_final);
+    DFS_final(grafo_final, stack_SCC);
 
     return 0;
 }
