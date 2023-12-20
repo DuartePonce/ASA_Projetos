@@ -38,29 +38,29 @@ void DFS_final(std::vector<std::vector<int>>& grafo) {
 
 
 
-// int DFS_Visit_final(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int i) {
-//     int son = 0;
-//     colors[i] = 1;
-//     for (int j = 0; j < (int) grafo[i].size(); j++) {
-//         if (colors[grafo[i][j]] == 0) {
-//             son = std::max(son, 1 + DFS_Visit_final(grafo, colors, grafo[i][j]));
-//         }
-//     }
+int DFS_Visit_final(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int i) {
+    int son = 0;
+    colors[i] = 1;
+    for (int j = 0; j < (int) grafo[i].size(); j++) {
+        if (colors[grafo[i][j]] == 0) {
+            son = std::max(son, 1 + DFS_Visit_final(grafo, colors, grafo[i][j]));
+        }
+    }
 
-//     return son;
-// }
-// void DFS_final(std::vector<std::vector<int>>& grafo) {
-//     std::vector<int> colors(SCC, 0);
-//     int res = 0;
+    return son;
+}
+void DFS_final(std::vector<std::vector<int>>& grafo) {
+    std::vector<int> colors(SCC, 0);
+    int res = 0;
 
-//     for (int i = 1; i < SCC; i++) {
-//         if (colors[i] == 0) {
-//             res = std::max(res, DFS_Visit_final(grafo, colors, i));
-//         }
-//     }
+    for (int i = 1; i < SCC; i++) {
+        if (colors[i] == 0) {
+            res = std::max(res, DFS_Visit_final(grafo, colors, i));
+        }
+    }
 
-//     printf("%d\n", res);
-// }
+    printf("%d\n", res);
+}
 
 
 

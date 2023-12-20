@@ -7,34 +7,61 @@
 // kasaraju
 int SCC = 1;
 
-
-void DFS_Visit_final(std::vector<std::vector<int>>& graph, int node, std::vector<int>& longestPath, std::vector<bool>& visited) {
-    visited[node] = true;
-    for (int neighbor : graph[node]) {
-        if (!visited[neighbor]) {
-            DFS_Visit_final(graph, neighbor, longestPath, visited);
+void DFS_final(std::vector<std::vector<int>>& grafo, int n, std::vector<int>& priority_list, std::vector<int>& stack_SCC) {
+    std::vector<int> colors(n + 1, 0); // 0 = white, 1 = gray, 2 = black
+    std::stack<int> stack;
+    for (int i = 0; i < (int) priority_list.size(); ++i) {
+        if (colors[priority_list[i]] == 0) {
+            stack.push(priority_list[i]);
+            while (!stack.empty()) {
+                int current = stack.top();
+                if (colors[current] == 0) {
+                    colors[current] = 1;
+                    for (int j = 0; j < (int) grafo[current].size(); j++) {
+                        if (colors[grafo[current][j]] == 0) {
+                            stack.push(grafo[current][j]);
+                            stack_SCC[grafo[current][j]] = SCC;        
+                        }
+                    }
+                } else {
+                    if (colors[current] == 1) {
+                        stack_SCC[priority_list[i]] = SCC;
+                    }
+                    colors[current] = 2;
+                    stack.pop();
+                }
+            }
         }
-        longestPath[node] = std::max(longestPath[node], 1 + longestPath[neighbor]);
+        SCC++;
     }
 }
+// void DFS_Visit_final(std::vector<std::vector<int>>& graph, int node, std::vector<int>& longestPath, std::vector<bool>& visited) {
+//     visited[node] = true;
+//     for (int neighbor : graph[node]) {
+//         if (!visited[neighbor]) {
+//             DFS_Visit_final(graph, neighbor, longestPath, visited);
+//         }
+//         longestPath[node] = std::max(longestPath[node], 1 + longestPath[neighbor]);
+//     }
+// }
 
-void DFS_final(std::vector<std::vector<int>>& graph) {
-    int nodes = graph.size();
-    std::vector<bool> visited(nodes, false);
-    std::vector<int> longestPath(nodes, 0);
+// void DFS_final(std::vector<std::vector<int>>& graph) {
+//     int nodes = graph.size();
+//     std::vector<bool> visited(nodes, false);
+//     std::vector<int> longestPath(nodes, 0);
 
-    for (int i = 0; i < nodes; ++i) {
-        if (!visited[i]) {
-            DFS_Visit_final(graph, i, longestPath, visited);
-        }
-    }
+//     for (int i = 0; i < nodes; ++i) {
+//         if (!visited[i]) {
+//             DFS_Visit_final(graph, i, longestPath, visited);
+//         }
+//     }
 
-    int maxLength = 0;
-    for (int length : longestPath) {
-        maxLength = std::max(maxLength, length);
-    }
-    printf("%d\n", maxLength);
-}
+//     int maxLength = 0;
+//     for (int length : longestPath) {
+//         maxLength = std::max(maxLength, length);
+//     }
+//     printf("%d\n", maxLength);
+// }
 
 
 void SCC_builder(std::vector<std::vector<int>>& grafo, int n, std::vector<std::vector<int>>& grafo_final, std::vector<int>& stack_SCC) {
@@ -58,25 +85,33 @@ void SCC_builder(std::vector<std::vector<int>>& grafo, int n, std::vector<std::v
     }
 }
 
-void DFS_Visit_transposta(std::vector<std::vector<int>>& grafo, std::vector<int>& colors, int i, std::vector<int>& stack_SCC) {
-    colors[i] = 1;
-    for (int j = 0; j < (int) grafo[i].size(); j++) {
-        if (colors[grafo[i][j]] == 0) {
-            DFS_Visit_transposta(grafo, colors, grafo[i][j], stack_SCC);
-            stack_SCC[grafo[i][j]] = SCC;
-
-        }
-    }
-}
 
 void DFS_transposta(std::vector<std::vector<int>>& grafo, int n, std::vector<int>& priority_list, std::vector<int>& stack_SCC) {
-    std::vector<int> colors(n + 1, 0);
-    for (int i = 0; i < n; i++) {
+    std::vector<int> colors(n + 1, 0); // 0 = white, 1 = gray, 2 = black
+    std::stack<int> stack;
+    for (int i = 0; i < (int) priority_list.size(); ++i) {
         if (colors[priority_list[i]] == 0) {
-            DFS_Visit_transposta(grafo, colors, priority_list[i], stack_SCC);
-            stack_SCC[priority_list[i]] = SCC;
-            SCC++;
+            stack.push(priority_list[i]);
+            while (!stack.empty()) {
+                int current = stack.top();
+                if (colors[current] == 0) {
+                    colors[current] = 1;
+                    for (int j = 0; j < (int) grafo[current].size(); j++) {
+                        if (colors[grafo[current][j]] == 0) {
+                            stack.push(grafo[current][j]);
+                            stack_SCC[grafo[current][j]] = SCC;        
+                        }
+                    }
+                } else {
+                    if (colors[current] == 1) {
+                        stack_SCC[priority_list[i]] = SCC;
+                    }
+                    colors[current] = 2;
+                    stack.pop();
+                }
+            }
         }
+        SCC++;
     }
 }
 
@@ -118,7 +153,7 @@ int main() {
 
     std::vector<std::vector<int>> grafo(n + 1);
     std::vector<std::vector<int>> transposto(n + 1);
-    std::vector<int> stack_SCC(n+1);
+    std::vector<int> stack_SCC(n + 1, 0);
     std::vector<int> priority_list ;
 
 
@@ -161,7 +196,7 @@ int main() {
     DFS_transposta(transposto, n, priority_list, stack_SCC);
     
     // printf("lista com os valores de SCC:\n");
-    // for (int i = 0; i < (int) stack_SCC.size(); i++) {
+    // for (int i = 1; i < (int) stack_SCC.size(); i++) {
     //     printf("%d i-> %d\n", i, stack_SCC[i]);
     // }
     // printf("\n");
