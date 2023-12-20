@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include <stack>
+#include <chrono>
 
 int SCC = 1;
 
@@ -138,14 +139,29 @@ int main() {
         transposto[v2].push_back(v1);
     }
 
+    auto start = std::chrono::high_resolution_clock::now();
     DFS(grafo, n, priority_list);
-    DFS_transposta(transposto, n, priority_list, stack_SCC);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "DFS elapsed time: " << duration.count()*1000 << " seconds" << std::endl;
 
+    auto start2 = std::chrono::high_resolution_clock::now();
+    DFS_transposta(transposto, n, priority_list, stack_SCC);
+    auto end2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration2 = end2 - start2;
+    std::cout << "DFS transposta elapsed time: " << duration2.count()*1000 << " seconds" << std::endl;
     std::vector<std::vector<int>> grafo_final(SCC);
 
+    auto start3 = std::chrono::high_resolution_clock::now();
     SCC_builder(grafo, n, grafo_final, stack_SCC);
+    auto end3 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration3 = end3 - start3;
+    std::cout << "DFS builder elapsed time: " << duration3.count()*1000 << " seconds" << std::endl;
 
+    auto start4 = std::chrono::high_resolution_clock::now();
     DFS_final(grafo_final, stack_SCC);
-
+    auto end4 = std::chrono::high_resolution_clock::now();   
+    std::chrono::duration<double> duration4 = end4 - start4;
+    std::cout << "DFS final elapsed time: " << duration4.count()*1000 << " seconds" << std::endl;
     return 0;
 }
