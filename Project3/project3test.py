@@ -38,7 +38,7 @@ problem += 3 * package_variable == brinquedos[f'brinquedo_{brinquedo1}']['quanti
                                    brinquedos[f'brinquedo_{brinquedo2}']['quantidade'] + \
                                    brinquedos[f'brinquedo_{brinquedo3}']['quantidade']
 
-problem += lpSum(brinquedos[toy]['quantidade'] for toy in brinquedos) <= max_brinquedos_dia
+problem += lpSum(brinquedos[toy]['quantidade'] + brinquedos[toy]['quantidade_brinquedos'] for toy in brinquedos) <= max_brinquedos_dia
 
 problem += lpSum(brinquedos[toy]['lucro'] * (brinquedos[toy]['quantidade'] + brinquedos[toy]['quantidade_pacotes']) for toy in brinquedos) + lpSum(pacotes[package]['lucro'] * pacotes[package]['quantidade'] for package in pacotes)
 
