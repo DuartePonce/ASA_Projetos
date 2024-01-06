@@ -33,14 +33,10 @@ for j in range(1, num_pacotes+1):
     brinquedos[f'brinquedo_{brinquedo3}']['quantidade_pacotes'] += pacotes[f'pacote_{j}']['quantidade']
     
 
-# Problem Formulation
-problem += 3 * package_variable == brinquedos[f'brinquedo_{brinquedo1}']['quantidade'] + \
-                                   brinquedos[f'brinquedo_{brinquedo2}']['quantidade'] + \
-                                   brinquedos[f'brinquedo_{brinquedo3}']['quantidade']
 
-problem += lpSum(brinquedos[toy]['quantidade'] + brinquedos[toy]['quantidade_brinquedos'] for toy in brinquedos) <= max_brinquedos_dia
+problem += lpSum(brinquedos[toy]['quantidade']  for toy in brinquedos) + lpSum(3 * pacotes[package]['quantidade'] for package in pacotes) <= max_brinquedos_dia
 
-problem += lpSum(brinquedos[toy]['lucro'] * (brinquedos[toy]['quantidade'] + brinquedos[toy]['quantidade_pacotes']) for toy in brinquedos) + lpSum(pacotes[package]['lucro'] * pacotes[package]['quantidade'] for package in pacotes)
+problem += lpSum(brinquedos[toy]['lucro'] * brinquedos[toy]['quantidade'] for toy in brinquedos) + lpSum(pacotes[package]['lucro'] * pacotes[package]['quantidade'] for package in pacotes)
 
 
 # Solve PULP_CBC_CMD
