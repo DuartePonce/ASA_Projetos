@@ -1,4 +1,33 @@
 from pulp import *
+import time
+
+class Chronometer:
+    def __init__(self):
+        self.start_time = None
+        self.is_running = False
+
+    def start(self):
+        if not self.is_running:
+            self.start_time = time.time()
+            self.is_running = True
+            print("Chronometer started.")
+
+    def stop(self):
+        if self.is_running:
+            elapsed_time = time.time() - self.start_time
+            self.is_running = False
+            print(f"Chronometer stopped. Elapsed time: {elapsed_time:.2f} seconds")
+
+    def reset(self):
+        self.start_time = None
+        self.is_running = False
+        print("Chronometer reset.")
+
+# Create a Chronometer instance
+chronometer = Chronometer()
+
+# Start the chronometer
+chronometer.start()
 
 problem = LpProblem("problem", LpMaximize)
 
@@ -46,6 +75,11 @@ problem += lpSum(brinquedos[toy]['lucro'] * brinquedos[toy]['quantidade'] for to
 
 # Solve PULP_CBC_CMD
 status = problem.solve(GLPK(msg=0))
+
+chronometer.stop()
+
+# Print the solution time
+print("Solution time:")
 #status = problem.solve(PULP_CBC_CMD(msg=False))
 print(value(problem.objective))
 #print("Status:", LpStatus[status])
