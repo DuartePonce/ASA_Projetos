@@ -3,30 +3,7 @@
 #include <vector>
 using namespace std;
 
-
-/*
-hstograma 1 tem o numero de vertices do grafo da maneira
-numero de relacoes      n de vertices output
-0                           2
-1                           0
-2                           1    
-*/
-
-/*
-histograma 2 tem o n de pessoas que gostam de um vertice
-n de amigos     n de vertices 
-0                       1
-1                       2
-2                       0
-
-input n de vertices depois n de realcoes
-    1   2   3
-1   
-2
-3
-*/
-
-//Funcao que le o input de relacoes
+//Function that reads the input of realtions
 void readFunction(int numberR, list<int> *listaRelacoes,  list<int> *listaRelacoesBack) {
     int vertice, verticeRelacao;
     for (int i = 0; i < numberR; i++) {
@@ -37,6 +14,7 @@ void readFunction(int numberR, list<int> *listaRelacoes,  list<int> *listaRelaco
     }
 }
 
+// Function that prints Histograma1
 void printFunction1(int numberV, list<int> *listaRelacoes) {
     cout << "Histograma 1\n";
     for (int i = 0; i < numberV; i++) {
@@ -50,6 +28,7 @@ void printFunction1(int numberV, list<int> *listaRelacoes) {
     }
 }
 
+// Function that prints Histograma2
 void printFunction2(int numberV, list<int> *listaRelacoesBack) {
     cout << "Histograma 2\n";
     for (int i = 0; i < numberV; i++) {
@@ -63,6 +42,7 @@ void printFunction2(int numberV, list<int> *listaRelacoesBack) {
     }
 }
 
+// Function that prints the matrix
 void printMatrix(int numberV, list<int> *listaRelacoes) {
     cout << "Matrix: \n";
     for (int i = 1; i <= numberV; i++) {

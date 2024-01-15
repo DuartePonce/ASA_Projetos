@@ -6,7 +6,7 @@ Done in collaboration with Rodrigo Salgueiro.
 
 | Release        | Description                                                    |
 | -------------- |:--------------------------------------------------------------:|
-| Project Zero   | Only basic functionality available, can't insert content yet.  |
-| First Project  | Only basic functionality available, can't insert content yet.  |
-| Second Project | Only basic functionality available, can't insert content yet.  |
-| Third Project  | Only basic functionality available, can't insert content yet.  |
+| Project Zero   | Basic Project to understand and learn c++                      |
+| First Project  | Project to apply Dynamic Programming and the notion it btings  |
+| Second Project | Project to apply the notions of SCC and longest path possible in a graph  |
+| Third Project  | Project to apply Linear Programming and the PULP library       |
