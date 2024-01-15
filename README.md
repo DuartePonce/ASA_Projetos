@@ -1,6 +1,6 @@
 # ASA_Projects
 A project done for the Analysis and Synthesis of Algorithms lecture (Instituto Superior Técnico).
-Essentially a terminal-only Excel copy.
+Essentially a terminal-only Excel copy. \n
 Done in collaboration with Fabio Prata.
 ## Releases
 
